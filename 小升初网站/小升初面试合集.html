@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贵阳市小升初面试内容合集</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .item-heading {
+            font-weight: bold;
+            color: #00FFFF;
+            margin-bottom: 5px;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        .item-content {
+            margin-bottom: 10px;
+        }
+        .interview-table th {
+            background-color: #111827;
+        }
+        .interview-table td {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        .interview-table td {
+            vertical-align: top;
+        }
+        .tab {
+            border-bottom: none;
+            background-color: #1f2937;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-right: 5px;
+            color: #f3f4f6;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            background-color: #00FFFF;
+            color: #111827;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #1f2937;
+            color: #00FFFF;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 3px;
+            border: 1px solid #374151;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        .tag-container {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #9ca3af;
+            padding-top: 20px;
+            border-top: 1px solid #374151;
+        }
+        @media (max-width: 768px) {
+            .interview-table th, .interview-table td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <!-- 标题区域 -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 title-gradient">贵阳市小升初面试内容合集</h1>
+            <p class="text-xl text-purple-400 max-w-3xl mx-auto" style="color: #DA70D6;">
+                <i class="fas fa-info-circle mr-2"></i>各学校面试内容、形式及要点整理
+            </p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('central-university')">中央民大学校</button>
+            <button class="tab" onclick="switchTab('guanshan-lake')">观山湖某公立学校</button>
+            <button class="tab" onclick="switchTab('popular-public')">某热门公立学校</button>
+            <button class="tab" onclick="switchTab('private-school')">某私立学校</button>
+        </div>
+        
+        <!-- 中央民大学校 -->
+        <div id="central-university" class="tab-content school-section active">
+            <div class="school-header">
+                <h2>中央民大学校面试内容</h2>
+            </div>
+            
+            <div class="tag-container">
+                <span class="tag">多年详细记录</span>
+                <span class="tag">全面考察</span>
+                <span class="tag">家长面试</span>
+                <span class="tag">才艺展示</span>
+                <span class="tag">写作能力</span>
+            </div>
+            
+            <table class="interview-table">
+                <thead>
+                    <tr>
+                        <th width="15%">面试年份</th>
+                        <th width="15%">面试对象</th>
+                        <th width="70%">面试内容细分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">自我介绍</div>
+                            <div class="item-content">全面介绍姓名、毕业学校、兴趣爱好、特长及小学成绩等。</div>
+                            
+                            <div class="item-heading">抽签回答</div>
+                            <div class="item-content">生活认知（零花钱来源与使用）、实践操作（描述一道菜）、思辨（校园精彩与宿舍温暖的理解）、情境应变（家人吵架处理）等。</div>
+                            
+                            <div class="item-heading">写一段话</div>
+                            <div class="item-content">看图写话（依图片编故事），自拟题目（围绕主题表达观点）。</div>
+                            
+                            <div class="item-heading">才艺表演</div>
+                            <div class="item-content">舞蹈、唱歌、乐器等展示。</div>
+                            
+                            <div class="item-heading">其他展示</div>
+                            <div class="item-content">颠乒乓球、跳绳、魔方等选一项展示。</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2024年</td>
+                        <td>家长</td>
+                        <td>
+                            <div class="item-heading">填表</div>
+                            <div class="item-content">基本情况、育儿理念、孩子习惯、成绩应对、手机使用等。</div>
+                            
+                            <div class="item-heading">调查问卷</div>
+                            <div class="item-content">与填表内容相近，侧重教育观念。</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2023年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">自我介绍</div>
+                            <div class="item-content">同2024年。</div>
+                            
+                            <div class="item-heading">抽题目答</div>
+                            <div class="item-content">兴趣爱好（体育项目及规则）、阅读推广（推荐书籍）、英语能力（拼写单词）、学校认知（选择民大理由）等。</div>
+                            
+                            <div class="item-heading">才艺展示</div>
+                            <div class="item-content">同2024年。</div>
+                            
+                            <div class="item-heading">自拟题目写作</div>
+                            <div class="item-content">围绕主题深入思考并表达见解。</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2022年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">礼仪细节</div>
+                            <div class="item-content">捡垃圾、归位凳子等。</div>
+                            
+                            <div class="item-heading">面试内容</div>
+                            <div class="item-content">魔方（空间思维）、跳绳（身体协调）、自我介绍、依描述画学校、才艺展示、颠乒乓球、听文章画画、在校情况提问（职务、学科优劣、排名）、学校意向了解（选择理由、参观次数）。</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2021年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">即兴演讲</div>
+                            <div class="item-content">给定话题，迅速组织语言。</div>
+                            
+                            <div class="item-heading">看图说话</div>
+                            <div class="item-content">依图片讲述故事或表达看法。</div>
+                            
+                            <div class="item-heading">依文字绘画解题</div>
+                            <div class="item-content">依文字描述绘画并解题。</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 观山湖某公立学校 -->
+        <div id="guanshan-lake" class="tab-content school-section">
+            <div class="school-header">
+                <h2>观山湖某公立学校面试内容</h2>
+            </div>
+            
+            <div class="tag-container">
+                <span class="tag">英语侧重</span>
+                <span class="tag">阅读理解</span>
+                <span class="tag">语言表达</span>
+            </div>
+            
+            <table class="interview-table">
+                <thead>
+                    <tr>
+                        <th width="15%">面试年份</th>
+                        <th width="15%">面试对象</th>
+                        <th width="70%">面试内容细分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>近年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">英文自我介绍</div>
+                            <div class="item-content">用英语介绍基本信息、兴趣等。</div>
+                            
+                            <div class="item-heading">语文阅读</div>
+                            <div class="item-content">抽文章，依指定句子展开阐述（如冰心《荷叶》提问）。</div>
+                            
+                            <div class="item-heading">英语朗读</div>
+                            <div class="item-content">朗读初中英语文章。</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 某热门公立学校 -->
+        <div id="popular-public" class="tab-content school-section">
+            <div class="school-header">
+                <h2>某热门公立学校面试内容</h2>
+            </div>
+            
+            <div class="tag-container">
+                <span class="tag">综合素质</span>
+                <span class="tag">逻辑思维</span>
+                <span class="tag">学科知识</span>
+                <span class="tag">社交能力</span>
+            </div>
+            
+            <table class="interview-table">
+                <thead>
+                    <tr>
+                        <th width="15%">面试年份</th>
+                        <th width="15%">面试对象</th>
+                        <th width="70%">面试内容细分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>近年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">自我介绍</div>
+                            <div class="item-content">全面介绍自我。</div>
+                            
+                            <div class="item-heading">社交倾向</div>
+                            <div class="item-content">是否喜欢交朋友。</div>
+                            
+                            <div class="item-heading">兴趣特长</div>
+                            <div class="item-content">了解兴趣爱好与特长。</div>
+                            
+                            <div class="item-heading">24点</div>
+                            <div class="item-content">数学游戏，考察计算与思维。</div>
+                            
+                            <div class="item-heading">学科提问</div>
+                            <div class="item-content">数学（最爱科目及知识问答），语文（背古诗及释义），英语（朗读与口语能力）。</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 某私立学校 -->
+        <div id="private-school" class="tab-content school-section">
+            <div class="school-header">
+                <h2>某私立学校面试内容</h2>
+            </div>
+            
+            <div class="tag-container">
+                <span class="tag">学科考核</span>
+                <span class="tag">知识测试</span>
+                <span class="tag">三科并重</span>
+            </div>
+            
+            <table class="interview-table">
+                <thead>
+                    <tr>
+                        <th width="15%">面试年份</th>
+                        <th width="15%">面试对象</th>
+                        <th width="70%">面试内容细分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>近年</td>
+                        <td>学生</td>
+                        <td>
+                            <div class="item-heading">基本信息</div>
+                            <div class="item-content">学习成绩、在校职位、爱好特长。</div>
+                            
+                            <div class="item-heading">数学测试</div>
+                            <div class="item-content">解答三道数学题。</div>
+                            
+                            <div class="item-heading">英语介绍</div>
+                            <div class="item-content">用英语进行自我介绍。</div>
+                            
+                            <div class="item-heading">语文理解</div>
+                            <div class="item-content">文言文阅读理解。</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="school-section">
+            <h2>小升初面试准备建议</h2>
+            <p>根据以上学校的面试内容，我们可以总结出以下几点准备建议：</p>
+            <ol>
+                <li><strong>自我介绍准备</strong>：准备中英文版本，包括基本信息、兴趣爱好、特长等，语言流畅自然。</li>
+                <li><strong>才艺准备</strong>：至少准备一项拿手才艺，如乐器、舞蹈、唱歌等；额外准备一些技能展示，如魔方、跳绳、颠乒乓球等。</li>
+                <li><strong>学科知识</strong>：复习语文、数学、英语基础知识，能够进行简单的即兴思考和问题解答。</li>
+                <li><strong>思辨能力</strong>：锻炼思考能力和表达能力，能够围绕主题发表个人见解，具备一定的思辨深度。</li>
+                <li><strong>综合素质</strong>：注重礼仪礼貌，培养良好的习惯，提高沟通交流能力。</li>
+                <li><strong>应急处理</strong>：模拟各种可能的面试场景，提高临场应变能力。</li>
+            </ol>
+            
+            <h3 style="color: #00FFFF; margin-top: 25px; text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);">科技特长方向准备建议</h3>
+            <p>随着科技教育的重视，具备科技特长的学生在小升初面试中更具竞争力。以下是科技特长方向的准备建议：</p>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                <div style="flex: 1; min-width: 300px; background: linear-gradient(135deg, #1f2937, #111827); padding: 15px; border-radius: 8px; border-left: 4px solid #FFFF00; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
+                    <h4 style="color: #00FFFF; margin-top: 0; text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);">人工智能方向</h4>
+                    <ul style="color: #f3f4f6;">
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">项目展示</strong>：准备1-2个小型AI应用案例，如智能识别应用、语音助手等</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">概念理解</strong>：理解AI基础概念，能用简单语言解释机器学习原理</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">兴趣培养</strong>：阅读少儿AI科普书籍，参加AI相关的科技营或培训</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">思维训练</strong>：具备分析问题和逻辑推理能力，展示算法思维</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">创意思考</strong>：准备一个AI应用的创意方案，解决生活中的实际问题</li>
+                    </ul>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background: linear-gradient(135deg, #1f2937, #111827); padding: 15px; border-radius: 8px; border-left: 4px solid #FFFF00; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
+                    <h4 style="color: #00FFFF; margin-top: 0; text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);">计算机科学方向</h4>
+                    <ul style="color: #f3f4f6;">
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">基础知识</strong>：掌握计算机基础知识，了解信息技术在各领域的应用</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">电子作品</strong>：设计过数字创意作品，如电子图画、多媒体故事等</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">逻辑思维</strong>：能够解决逻辑推理问题，展示系统化思考能力</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">创新应用</strong>：结合其他学科知识(如数学、科学)展示跨学科融合能力</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">科技活动</strong>：参与过信息学科技营、计算机科学普及活动等</li>
+                    </ul>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background: linear-gradient(135deg, #1f2937, #111827); padding: 15px; border-radius: 8px; border-left: 4px solid #FFFF00; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
+                    <h4 style="color: #00FFFF; margin-top: 0; text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);">信息学与创客方向</h4>
+                    <ul style="color: #f3f4f6;">
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">数字素养</strong>：展示信息检索、数据分析和数字资源应用能力</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">创客作品</strong>：制作过简单的科技创意作品，如智能家居模型、环保监测装置等</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">团队协作</strong>：参与过创客或科技创新小组项目，具备团队合作经验</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">科技交流</strong>：能清晰表达科技概念，介绍自己的创意和作品</li>
+                        <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">信息素养</strong>：了解信息安全、数据隐私等信息素养知识</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #1f2937, #111827); padding: 15px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); border-left: 4px solid #FFFF00;">
+                <h4 style="color: #00FFFF; margin-top: 0; text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);">科技特长展示技巧</h4>
+                <ul style="color: #f3f4f6;">
+                    <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">准备作品集</strong>：将自己的科技作品、创意设计等整理成展示册，可以是实物模型、图片或演示视频</li>
+                    <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">简明表达</strong>：用简洁明了的语言解释科技概念，避免过多专业术语</li>
+                    <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">实际应用</strong>：强调技术如何解决实际问题，展示科技与生活的结合</li>
+                    <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">展示热情</strong>：表现出对科技的浓厚兴趣和持续学习的态度</li>
+                    <li><strong style="color: #00FFFF; text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);">跨学科思考</strong>：展示科技与其他学科(如数学、科学、艺术)的融合思考</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 贵阳市小升初面试内容合集 · 数据整理时间: 2024年</p>
+            <p>本资料仅供参考，具体面试内容可能会随年份变化，请以学校最新公告为准</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有标签的活动状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 将点击的标签设置为活动状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                if (tab.textContent.includes(tabId === 'central-university' ? '中央民大' : 
+                                           tabId === 'guanshan-lake' ? '观山湖' : 
+                                           tabId === 'popular-public' ? '热门公立' : '私立')) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

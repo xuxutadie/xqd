@@ -99,7 +99,8 @@ body {
   background-color: var(--nav-bg);
   border-radius: 5px;
   margin-bottom: 20px;
-  border: 1px solid var(--secondary-color);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 0 15px var(--card-border);
   position: relative;
   z-index: 10;
 }
@@ -139,7 +140,7 @@ body {
   z-index: 15;
   justify-self: end;
 }
-}
+
 
 /* 主题切换开关 */
 .theme-toggle {

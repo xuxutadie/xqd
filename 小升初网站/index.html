@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贵阳教育资源平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+        
+        .dark .bg-white {
+            background-color: #1f2937;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #374151;
+        }
+        
+        .title-gradient {
+            background: linear-gradient(90deg, #00FFFF, #40E0D0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 3s ease infinite;
+            background-size: 200% auto;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7), 0 0 20px rgba(0, 204, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s, background 0.5s;
+            height: 100%;
+            background: linear-gradient(135deg, #1f2937, #111827);
+            border: 1px solid #374151;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #263244, #1a202c);
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s, text-shadow 0.3s;
+        }
+        
+        .card:hover .card-icon {
+            transform: scale(1.1);
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .shadow-glow {
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+        
+        .shadow-glow::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0), 0 0 30px rgba(0, 204, 255, 0);
+            transition: box-shadow 0.3s;
+            pointer-events: none;
+        }
+        
+        .shadow-glow:hover::after {
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), 0 0 30px rgba(0, 204, 255, 0.2);
+        }
+        
+        .footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            border-top: 1px solid #374151;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部区域 -->
+    <header class="py-12 px-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 title-gradient">贵阳教育资源平台</h1>
+            <p class="text-xl text-purple-400 max-w-3xl mx-auto" style="color: #DA70D6;">
+                <i class="fas fa-info-circle mr-2"></i>汇集贵阳市教育资源信息，助力学生和家长做出更好的教育选择
+            </p>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto py-12 px-4">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-200">教育资源导航</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 小学梯队 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-blue-400">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">贵阳小学梯队</h3>
+                        <p class="text-gray-400 mb-4">2024年贵阳市小学梯队排名及详细信息</p>
+                        <a href="贵阳小学梯队.html" class="inline-block bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-blue-600 hover:to-blue-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 初中梯队 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-green-400">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">贵阳初中梯队</h3>
+                        <p class="text-gray-400 mb-4">2024年贵阳市中考高分、均分成绩人数占比一览表</p>
+                        <a href="贵阳初中梯队.html" class="inline-block bg-gradient-to-r from-green-500 to-green-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-green-600 hover:to-green-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 高中梯队 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-yellow-400">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">贵阳高中梯队</h3>
+                        <p class="text-gray-400 mb-4">贵阳高中梯队排名数据可视化</p>
+                        <a href="贵阳高中梯队.html" class="inline-block bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-yellow-600 hover:to-yellow-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 小升初面试合集 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-purple-400">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">小升初面试合集</h3>
+                        <p class="text-gray-400 mb-4">贵阳市小升初面试内容合集</p>
+                        <a href="小升初面试合集.html" class="inline-block bg-gradient-to-r from-purple-500 to-purple-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-purple-600 hover:to-purple-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 示范性高中及优秀普高 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-red-400">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">示范性高中及优秀普高</h3>
+                        <p class="text-gray-400 mb-4">贵阳市示范性高中及优秀普通高中信息</p>
+                        <a href="示范性高中及优秀普高.html" class="inline-block bg-gradient-to-r from-red-500 to-red-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-red-600 hover:to-red-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 校推及可住宿公办初中 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-indigo-400">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">校推及可住宿公办初中</h3>
+                        <p class="text-gray-400 mb-4">贵阳市校推及可住宿公办初中信息</p>
+                        <a href="校推及可住宿公办初中.html" class="inline-block bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-indigo-600 hover:to-indigo-700">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 贵阳8所新校区 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-blue-400">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">贵阳8所新校区</h3>
+                        <p class="text-gray-400 mb-4">贵阳8所合作共建优质校信息</p>
+                        <a href="贵阳8所新校区.html" class="inline-block bg-gradient-to-r from-blue-400 to-blue-500 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-blue-500 hover:to-blue-600">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 贵阳30余所重点初中联系方式 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-green-400">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">重点初中联系方式</h3>
+                        <p class="text-gray-400 mb-4">贵阳30余所重点初中联系方式、公众号汇总</p>
+                        <a href="贵阳30余所贵阳重点初中联系方式、公众号汇总.html" class="inline-block bg-gradient-to-r from-green-400 to-green-500 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-green-500 hover:to-green-600">查看详情</a>
+                    </div>
+                </div>
+
+                <!-- 阳光分班及学校对比 -->
+                <div class="card rounded-xl shadow-lg overflow-hidden border border-gray-700 shadow-glow">
+                    <div class="p-6 text-center">
+                        <div class="card-icon text-yellow-400">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-200">阳光分班及学校对比</h3>
+                        <p class="text-gray-400 mb-4">贵阳市阳光分班及学校对比信息</p>
+                        <a href="阳光分班及学校对比.html" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-medium py-2 px-4 rounded-md transition duration-300 hover:from-yellow-500 hover:to-yellow-600">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚区域 -->
+    <footer class="footer py-8 px-4">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-400">© 2025 贵阳教育资源平台 - 为贵阳学生和家长提供全面的教育资源信息</p>
+            <p class="mt-2 text-sm text-gray-500">本平台仅供教育参考，不构成官方指导意见</p>
+        </div>
+    </footer>
+
+    <script>
+        // 添加返回主页的功能到每个HTML页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否是主页
+            if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
+                return;
+            }
+            
+            // 创建返回按钮
+            const backButton = document.createElement('div');
+            backButton.innerHTML = '<a href="index.html" class="fixed bottom-6 right-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-full p-3 shadow-glow transition duration-300 hover:from-yellow-600 hover:to-yellow-700" title="返回主页"><i class="fas fa-home text-xl"></i></a>';
+            document.body.appendChild(backButton.firstChild);
+        });
+    </script>
+</body>
+</html>

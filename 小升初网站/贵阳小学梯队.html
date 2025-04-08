@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024年贵阳市中小学梯队排名</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .note {
+            font-size: 14px;
+            color: #a78bfa;
+            font-style: italic;
+        }
+        .tier-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .tier {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .tier-header {
+            background-color: #1f2937;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tier-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f3f4f6;
+            margin: 0;
+        }
+        .tier-count {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        .school-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .school-item {
+            background: linear-gradient(135deg, #1f2937, #2d3748);
+            color: #FFD700;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        .school-item:hover {
+            background: linear-gradient(135deg, #2d3748, #374151);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
+        }
+        .public .school-item {
+            background: linear-gradient(135deg, #1f2937, #2d3748);
+            border: 1px solid #4b5563;
+        }
+        .public .tier-count {
+            background-color: #0066cc;
+        }
+        .private .school-item {
+            background: linear-gradient(135deg, #2a2040, #3d2a5c);
+            border: 1px solid #6b46c1;
+        }
+        .private .tier-count {
+            background-color: #cc0066;
+        }
+        .tier-1 .school-item {
+            border-left: 4px solid #ff6b6b;
+        }
+        .tier-2 .school-item {
+            border-left: 4px solid #ffd166;
+        }
+        .tier-3 .school-item {
+            border-left: 4px solid #06d6a0;
+        }
+        .comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .comparison-chart {
+            flex: 1;
+            min-width: 300px;
+            background-color: #1f2937;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #4b5563;
+            color: #ffffff;
+        }
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .chart-bar {
+            height: 40px;
+            background-color: #0066cc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            transition: width 1s ease-in-out;
+        }
+        .chart-bar-label {
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .public-bar {
+            background-color: #0066cc;
+        }
+        .private-bar {
+            background-color: #cc0066;
+        }
+        .tier-distribution {
+            width: 100%;
+            margin-top: 30px;
+        }
+        .distribution-container {
+            display: flex;
+            height: 30px;
+            background-color: #374151;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #4b5563;
+        }
+        .distribution-segment {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.5s ease;
+        }
+        .distribution-segment:first-child {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+        .distribution-segment:last-child {
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .segment-1 {
+            background-color: #ff6b6b;
+        }
+        .segment-2 {
+            background-color: #ffd166;
+        }
+        .segment-3 {
+            background-color: #06d6a0;
+        }
+        .distribution-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 768px) {
+            .comparison {
+                flex-direction: column;
+            }
+            .school-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <!-- 标题区域 -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 title-gradient">2024年贵阳市中小学梯队排名</h1>
+            <p class="text-xl text-purple-400 max-w-3xl mx-auto" style="color: #DA70D6;">
+                <i class="fas fa-info-circle mr-2"></i>贵阳市小学梯队排名及详细信息
+            </p>
+        </div>
+        <header>
+            <h1>2024年贵阳市中小学梯队排名</h1>
+            <p class="subtitle">最新版 · 公办与民办小学全面对比</p>
+            <p class="note">本梯队根据口碑、历年成绩数据相关综合得出，仅为民间统计，仅供参考</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('public')">公办小学</button>
+            <button class="tab" onclick="switchTab('private')">民办小学</button>
+            <button class="tab" onclick="switchTab('comparison')">对比分析</button>
+        </div>
+        
+        <!-- 公办小学内容 -->
+        <div id="public" class="tab-content public active">
+            <div class="tier-container">
+                <div class="tier tier-1">
+                    <div class="tier-header">
+                        <h3 class="tier-title">公办第一梯队</h3>
+                        <span class="tier-count">11</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">实验小学</div>
+                        <div class="school-item">甲秀小学</div>
+                        <div class="school-item">环西小学</div>
+                        <div class="school-item">省府路小学</div>
+                        <div class="school-item">北师大附小</div>
+                        <div class="school-item">芳草地小学</div>
+                        <div class="school-item">实验二小</div>
+                        <div class="school-item">南明小学</div>
+                        <div class="school-item">华东师范</div>
+                        <div class="school-item">人大附小</div>
+                        <div class="school-item">尚义路小学</div>
+                    </div>
+                </div>
+                
+                <div class="tier tier-2">
+                    <div class="tier-header">
+                        <h3 class="tier-title">公办第二梯队</h3>
+                        <span class="tier-count">19</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">实验四小</div>
+                        <div class="school-item">双语实验</div>
+                        <div class="school-item">云岩小学</div>
+                        <div class="school-item">东山小学</div>
+                        <div class="school-item">达德小学</div>
+                        <div class="school-item">纪念塔小学</div>
+                        <div class="school-item">南明实验小学</div>
+                        <div class="school-item">向阳实验小学</div>
+                        <div class="school-item">翠微小学</div>
+                        <div class="school-item">世纪城小学</div>
+                        <div class="school-item">实验一小</div>
+                        <div class="school-item">西南大学附属</div>
+                        <div class="school-item">观山湖外国语</div>
+                        <div class="school-item">贵阳附小</div>
+                        <div class="school-item">中天铭庭小学</div>
+                        <div class="school-item">观山湖培文小学</div>
+                        <div class="school-item">观山湖八中（小学）</div>
+                        <div class="school-item">观山湖十中（小学）</div>
+                    </div>
+                </div>
+                
+                <div class="tier tier-3">
+                    <div class="tier-header">
+                        <h3 class="tier-title">公办第三梯队</h3>
+                        <span class="tier-count">22</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">华润小学</div>
+                        <div class="school-item">海文小学</div>
+                        <div class="school-item">毓秀路小学</div>
+                        <div class="school-item">苗苗小学</div>
+                        <div class="school-item">市东小学</div>
+                        <div class="school-item">会展小学</div>
+                        <div class="school-item">水口寺小学</div>
+                        <div class="school-item">中铁逸都</div>
+                        <div class="school-item">花果园一小</div>
+                        <div class="school-item">花果园三小</div>
+                        <div class="school-item">黄城根小学</div>
+                        <div class="school-item">阅山湖小学</div>
+                        <div class="school-item">会展二小</div>
+                        <div class="school-item">白云一小</div>
+                        <div class="school-item">太慈桥小学</div>
+                        <div class="school-item">乌当新九</div>
+                        <div class="school-item">新天一校</div>
+                        <div class="school-item">漓江小学</div>
+                        <div class="school-item">白云十一小</div>
+                        <div class="school-item">黔灵小学</div>
+                        <div class="school-item">新华路小学</div>
+                        <div class="school-item">枫丹白露小学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 民办小学内容 -->
+        <div id="private" class="tab-content private">
+            <div class="tier-container">
+                <div class="tier tier-1">
+                    <div class="tier-header">
+                        <h3 class="tier-title">民办第一梯队</h3>
+                        <span class="tier-count">3</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">中天小学</div>
+                        <div class="school-item">华麟小学</div>
+                        <div class="school-item">一中新世界小学</div>
+                    </div>
+                </div>
+                
+                <div class="tier tier-2">
+                    <div class="tier-header">
+                        <h3 class="tier-title">民办第二梯队</h3>
+                        <span class="tier-count">8</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">乐湾小学</div>
+                        <div class="school-item">为明小学</div>
+                        <div class="school-item">培文小学</div>
+                        <div class="school-item">普瑞小学</div>
+                        <div class="school-item">海嘉小学</div>
+                        <div class="school-item">英语实验小学</div>
+                        <div class="school-item">碧桂园国际小学</div>
+                        <div class="school-item">博雅实验小学</div>
+                    </div>
+                </div>
+                
+                <div class="tier tier-3">
+                    <div class="tier-header">
+                        <h3 class="tier-title">民办第三梯队</h3>
+                        <span class="tier-count">4</span>
+                    </div>
+                    <div class="school-list">
+                        <div class="school-item">北大新世纪小学</div>
+                        <div class="school-item">京学附属小学</div>
+                        <div class="school-item">剑桥小学</div>
+                        <div class="school-item">水东实验小学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 对比分析内容 -->
+        <div id="comparison" class="tab-content">
+            <div class="comparison">
+                <div class="comparison-chart">
+                    <h3>学校数量对比</h3>
+                    <div class="chart-container">
+                        <div class="chart-bar-label">公办小学 (52所)</div>
+                        <div class="chart-bar public-bar" style="width: 90%">52</div>
+                        <div class="chart-bar-label">民办小学 (15所)</div>
+                        <div class="chart-bar private-bar" style="width: 25.9%">15</div>
+                    </div>
+                </div>
+                
+                <div class="comparison-chart">
+                    <h3>各梯队学校分布</h3>
+                    <div class="chart-container">
+                        <div class="chart-bar-label">第一梯队</div>
+                        <div class="chart-bar public-bar" style="width: 60%; margin-right: 5px;">11</div>
+                        <div class="chart-bar private-bar" style="width: 16.4%;">3</div>
+                        
+                        <div class="chart-bar-label">第二梯队</div>
+                        <div class="chart-bar public-bar" style="width: 90%; margin-right: 5px;">19</div>
+                        <div class="chart-bar private-bar" style="width: 38%;">8</div>
+                        
+                        <div class="chart-bar-label">第三梯队</div>
+                        <div class="chart-bar public-bar" style="width: 90%; margin-right: 5px;">22</div>
+                        <div class="chart-bar private-bar" style="width: 19%;">4</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tier-distribution">
+                <h3>梯队分布比例</h3>
+                
+                <h4>公办小学梯队分布</h4>
+                <div class="distribution-container">
+                    <div class="distribution-segment segment-1" style="width: 21.2%">21.2%</div>
+                    <div class="distribution-segment segment-2" style="width: 36.5%">36.5%</div>
+                    <div class="distribution-segment segment-3" style="width: 42.3%">42.3%</div>
+                </div>
+                
+                <h4>民办小学梯队分布</h4>
+                <div class="distribution-container">
+                    <div class="distribution-segment segment-1" style="width: 20%">20%</div>
+                    <div class="distribution-segment segment-2" style="width: 53.3%">53.3%</div>
+                    <div class="distribution-segment segment-3" style="width: 26.7%">26.7%</div>
+                </div>
+                
+                <div class="distribution-legend">
+                    <div class="legend-item">
+                        <div class="legend-color segment-1"></div>
+                        <span>第一梯队</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color segment-2"></div>
+                        <span>第二梯队</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color segment-3"></div>
+                        <span>第三梯队</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 贵阳市中小学梯队排名 · 数据更新时间: 2024年3月</p>
+            <p>本梯队根据口碑、历年成绩数据相关综合得出，仅为民间统计，仅供参考</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有标签的活动状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 将点击的标签设置为活动状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                if (tab.innerHTML.includes(tabId === 'public' ? '公办小学' : 
+                                         tabId === 'private' ? '民办小学' : '对比分析')) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+        
+        // 添加动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.chart-bar').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+                
+                document.querySelectorAll('.distribution-segment').forEach(segment => {
+                    const width = segment.style.width;
+                    segment.style.width = '0';
+                    setTimeout(() => {
+                        segment.style.width = width;
+                    }, 300);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
