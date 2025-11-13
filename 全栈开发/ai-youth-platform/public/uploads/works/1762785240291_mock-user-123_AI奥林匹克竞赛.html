@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新起点青少年人工智能—奥林匹克竞赛大纲</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            border-bottom: 8px solid #ff9800;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        h2 {
+            color: #6a11cb;
+            border-bottom: 3px solid #ff9800;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #2575fc;
+            margin-top: 20px;
+        }
+        
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-header {
+            padding: 15px;
+            background: #6a11cb;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .topic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .topic-table th {
+            background-color: #6a11cb;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        .topic-table tr:nth-child(even) {
+            background-color: #f0f7ff;
+        }
+        
+        .topic-table tr:hover {
+            background-color: #e6f0ff;
+        }
+        
+        .topic-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .topic-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        
+        .badge-theory {
+            background-color: #3B82F6;
+        }
+        
+        .badge-practice {
+            background-color: #10B981;
+        }
+        
+        .badge-both {
+            background-color: #8B5CF6;
+        }
+        
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #6a11cb;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e9e9e9;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 10px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 10px;
+            transition: width 1s;
+        }
+        
+        .learning-path {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed #6a11cb;
+        }
+        
+        .learning-step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background-color: #6a11cb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .footer {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-info {
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: white;
+            color: #6a11cb;
+            transform: translateY(-3px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .topic-table th, .topic-table td {
+                padding: 8px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+        
+        /* 深色模式切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6a11cb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* 深色模式样式 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1c2c 0%, #212946 100%);
+            color: #e4e6eb;
+        }
+        
+        body.dark-mode .section {
+            background-color: #2d3748;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+        
+        body.dark-mode h2 {
+            color: #a78bfa;
+        }
+        
+        body.dark-mode h3 {
+            color: #60a5fa;
+        }
+        
+        body.dark-mode .card {
+            background: #2d3748;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.dark-mode .topic-table th {
+            background-color: #4c1d95;
+        }
+        
+        body.dark-mode .topic-table tr:nth-child(even) {
+            background-color: #374151;
+        }
+        
+        body.dark-mode .topic-table tr:hover {
+            background-color: #4b5563;
+        }
+        
+        body.dark-mode .topic-table td {
+            border-bottom: 1px solid #4b5563;
+        }
+        
+        body.dark-mode .stat-item {
+            background-color: #2d3748;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.dark-mode .stat-value {
+            color: #a78bfa;
+        }
+        
+        body.dark-mode .stat-label {
+            color: #d1d5db;
+        }
+        
+        body.dark-mode .learning-path {
+            background-color: #2d3748;
+            border-color: #7c3aed;
+        }
+        
+        body.dark-mode .progress-container {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>新起点青少年人工智能—奥林匹克竞赛大纲</h1>
+        <p>探索人工智能奥赛世界，系统掌握AI竞赛技能！</p>
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>人工智能奥赛主题分类</h2>
+            <p>奥林匹克竞赛主题分为三个不同的学习部分，帮助学生全面掌握AI竞赛所需的理论与实践能力！</p>
+            
+            <div class="cards">
+                <div class="card">
+                    <div class="card-header">理论（它如何工作）</div>
+                    <div class="card-body">
+                        <p><strong>学习人工智能背后的"为什么"</strong></p>
+                        <p>参赛者应彻底理解核心概念和理论基础。这可能涉及学习教科书课程和其他资源，以深入了解为人工智能算法提供动力的机制。</p>
+                        <p>理论知识让你不仅知道"如何使用"，还能理解"为什么这样做"！</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">实践（它做什么，何时使用）</div>
+                    <div class="card-body">
+                        <p><strong>掌握实际编程与应用技能</strong></p>
+                        <p>参赛者应具备将人工智能方法在代码中实现的实践技能。这包括知道如何有效使用库函数，在特定数据上调用方法，以及解释输出。</p>
+                        <p>例如：参赛者不必完全剖析Adam优化器的内部工作原理，但他们应能决定何时以及如何使用它。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">两者兼有</div>
+                    <div class="card-body">
+                        <p><strong>理论与实践相结合的主题</strong></p>
+                        <p>某些主题需要同时了解理论原理和实践应用。这种结构化方法确保参赛者在各种人工智能主题上获得概念洞察和实践技能的正确平衡。</p>
+                        <p>成为真正的AI高手需要理论与实践并重！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>第1部分：基础技能与经典机器学习</h2>
+            
+            <h3>编程基础</h3>
+            <table class="topic-table">
+                <thead>
+                    <tr>
+                        <th>子主题</th>
+                        <th>分类</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #2196F3;">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            Python基础（循环、函数等）
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #FF9800;">
+                                <i class="fas fa-table"></i>
+                            </div>
+                            NumPy和Pandas用于数据处理
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #4CAF50;">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            Matplotlib和Seaborn用于可视化
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #9C27B0;">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            Scikit-learn用于机器学习
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #F44336;">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            PyTorch基础
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #607D8B;">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            张量（多维数组）操作
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #00BCD4;">
+                                <i class="fas fa-sync"></i>
+                            </div>
+                            可重复性基础（种子、设备、推理）
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #795548;">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            在CPU和GPU上训练模型
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #009688;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            权重和偏差（实验跟踪）
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>监督学习</h3>
+            <table class="topic-table">
+                <thead>
+                    <tr>
+                        <th>子主题</th>
+                        <th>分类</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #2196F3;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            线性回归
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #FF9800;">
+                                <i class="fas fa-sort-amount-up"></i>
+                            </div>
+                            逻辑回归
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #4CAF50;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            K-近邻（K-NN）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #9C27B0;">
+                                <i class="fas fa-tree"></i>
+                            </div>
+                            决策树
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #795548;">
+                                <i class="fas fa-forest"></i>
+                            </div>
+                            随机森林
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #607D8B;">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            梯度提升（例如，XGBoost）
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #F44336;">
+                                <i class="fas fa-vector-square"></i>
+                            </div>
+                            支持向量机（SVM）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>无监督学习</h3>
+            <table class="topic-table">
+                <thead>
+                    <tr>
+                        <th>子主题</th>
+                        <th>分类</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #2196F3;">
+                                <i class="fas fa-object-group"></i>
+                            </div>
+                            K-均值聚类
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #FF9800;">
+                                <i class="fas fa-compress-alt"></i>
+                            </div>
+                            主成分分析（PCA）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #4CAF50;">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            t-SNE、MAP、其他降维方法
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #9C27B0;">
+                                <i class="fas fa-braille"></i>
+                            </div>
+                            DBSCAN聚类
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #F44336;">
+                                <i class="fas fa-sitemap"></i>
+                            </div>
+                            层次聚类
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>评估</h3>
+            <table class="topic-table">
+                <thead>
+                    <tr>
+                        <th>子主题</th>
+                        <th>分类</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #2196F3;">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            模型评估指标（准确度、精确度、召回率、F1分数等）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #FF9800;">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            欠拟合、过拟合
+                        </td>
+                        <td><span class="badge badge-theory">理论</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #4CAF50;">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            超参数调优
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #9C27B0;">
+                                <i class="fas fa-retweet"></i>
+                            </div>
+                            交叉验证
+                        </td>
+                        <td><span class="badge badge-practice">实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #F44336;">
+                                <i class="fas fa-th"></i>
+                            </div>
+                            混淆矩阵和ROC曲线
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="section">
+            <h2>第2部分：神经网络与深度学习</h2>
+            
+            <h3>神经网络</h3>
+            <table class="topic-table">
+                <thead>
+                    <tr>
+                        <th>子主题</th>
+                        <th>分类</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #2196F3;">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            感知器基础
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #FF9800;">
+                                <i class="fas fa-angle-double-down"></i>
+                            </div>
+                            梯度下降
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #4CAF50;">
+                                <i class="fas fa-undo"></i>
+                            </div>
+                            反向传播
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #9C27B0;">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            激活函数（ReLU、Sigmoid、Tanh）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="icon-box" style="background-color: #F44336;">
+                                <i class="fas fa-minus-square"></i>
+                            </div>
+                            损失函数（MSE、MAE、交叉熵等）
+                        </td>
+                        <td><span class="badge badge-both">理论与实践</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+<h3>深度学习</h3>
+<table class="topic-table">
+    <thead>
+        <tr>
+            <th>子主题</th>
+            <th>分类</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #2196F3;">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                多层感知器（MLP）
+            </td>
+            <td><span class="badge badge-both">理论与实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #FF9800;">
+                    <i class="fas fa-random"></i>
+                </div>
+                随机梯度下降（SGD）、小批量梯度下降
+            </td>
+            <td><span class="badge badge-both">理论与实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #4CAF50;">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                动量方法（Adam、AdamW）
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #9C27B0;">
+                    <i class="fas fa-ruler-vertical"></i>
+                </div>
+                自适应学习率
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #F44336;">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                收敛和学习率
+            </td>
+            <td><span class="badge badge-both">理论与实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #607D8B;">
+                    <i class="fas fa-weight"></i>
+                </div>
+                权重正则化
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #00BCD4;">
+                    <i class="fas fa-ban"></i>
+                </div>
+                提前停止
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #009688;">
+                    <i class="fas fa-random"></i>
+                </div>
+                Dropout、高斯噪声
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #673AB7;">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                权重初始化
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #795548;">
+                    <i class="fas fa-sort-numeric-down"></i>
+                </div>
+                批量归一化
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="icon-box" style="background-color: #E91E63;">
+                    <i class="fas fa-compress"></i>
+                </div>
+                自编码器和稀疏编码器
+            </td>
+            <td><span class="badge badge-practice">实践</span></td>
+        </tr>
+    </tbody>
+</table>
+
+    <h2>第3部分：计算机视觉</h2>
+    
+    <h3>计算机视觉基础</h3>
+    <table class="topic-table">
+        <thead>
+            <tr>
+                <th>子主题</th>
+                <th>分类</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #2196F3;">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    卷积层基础
+                </td>
+                <td><span class="badge badge-both">理论与实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #FF9800;">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    池化技术（最大池化、平均池化）
+                </td>
+                <td><span class="badge badge-both">理论与实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #4CAF50;">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    基本图像分类
+                </td>
+                <td><span class="badge badge-both">理论与实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #9C27B0;">
+                        <i class="fas fa-object-ungroup"></i>
+                    </div>
+                    目标检测基础（YOLO、SSD）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #F44336;">
+                        <i class="fas fa-crop-alt"></i>
+                    </div>
+                    图像分割基础（U-Net）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #607D8B;">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    图像分类的迁移学习（例如，ResNet、MobileNet）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #00BCD4;">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                    图像增强技术
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #009688;">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    使用预训练模型进行特征提取
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #673AB7;">
+                        <i class="fas fa-clone"></i>
+                    </div>
+                    生成对抗网络（GANs）简介（生成图像）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #795548;">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    自监督学习在视觉中的应用
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #E91E63;">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    视觉Transformer（ViT）基础
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #3F51B5;">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    CLIP和多模态学习
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #FF5722;">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    生成模型，如Stable Diffusion、DALL.E
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="section">
+    <h2>第4部分：自然语言处理</h2>
+    
+    <h3>自然语言处理（NLP）</h3>
+    <table class="topic-table">
+        <thead>
+            <tr>
+                <th>子主题</th>
+                <th>分类</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #2196F3;">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    词嵌入（Word2Vec、GloVe）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #FF9800;">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    Transformer基础（注意力机制）
+                </td>
+                <td><span class="badge badge-both">理论与实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #4CAF50;">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    文本分类
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #9C27B0;">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    预训练NLP模型简介（例如，BERT、GPT）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #F44336;">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    使用预训练模型进行问答
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #607D8B;">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    大型语言模型（LLMs）简介（例如，GPT-4）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #00BCD4;">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    使用NLP构建简单聊天机器人
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #009688;">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    模型微调：方法和局限性（LoRA、Adapters等）
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon-box" style="background-color: #673AB7;">
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                    LLM代理基础
+                </td>
+                <td><span class="badge badge-practice">实践</span></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- 添加一个总结部分 -->
+<section class="section">
+    <h2>竞赛学习路径</h2>
+    
+    <div class="learning-path">
+        <div class="learning-step">
+            <div class="step-number">1</div>
+            <div>
+                <h3>打好基础（1-2个月）</h3>
+                <p>掌握Python编程、数据处理和基本机器学习算法，为后续学习打下坚实基础。</p>
+            </div>
+        </div>
+        
+        <div class="learning-step">
+            <div class="step-number">2</div>
+            <div>
+                <h3>深入理论（2-3个月）</h3>
+                <p>理解机器学习和深度学习的核心理论，包括神经网络基础、反向传播、梯度下降等。</p>
+            </div>
+        </div>
+        
+        <div class="learning-step">
+            <div class="step-number">3</div>
+            <div>
+                <h3>实践应用（3-4个月）</h3>
+                <p>通过项目实践应用所学知识，掌握计算机视觉和自然语言处理的关键技术。</p>
+            </div>
+        </div>
+        
+        <div class="learning-step">
+            <div class="step-number">4</div>
+            <div>
+                <h3>竞赛准备（1-2个月）</h3>
+                <p>参加模拟比赛，强化问题解决能力，熟悉竞赛环境和要求。</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-value">200+</div>
+            <div class="stat-label">学习小时</div>
+        </div>
+        
+        <div class="stat-item">
+            <div class="stat-value">40+</div>
+            <div class="stat-label">实践项目</div>
+        </div>
+        
+        <div class="stat-item">
+            <div class="stat-value">4</div>
+            <div class="stat-label">核心模块</div>
+        </div>
+        
+        <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">竞赛覆盖率</div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>学习资源推荐</h2>
+    
+    <div class="cards">
+        <div class="card">
+            <div class="card-header">在线课程</div>
+            <div class="card-body">
+                <p><strong>推荐学习平台</strong></p>
+                <ul>
+                    <li>吴恩达深度学习专项课程</li>
+                    <li>李宏毅机器学习课程</li>
+                    <li>PyTorch官方教程</li>
+                    <li>TensorFlow官方教程</li>
+                    <li>Kaggle竞赛平台</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">参考书籍</div>
+            <div class="card-body">
+                <p><strong>必读书籍清单</strong></p>
+                <ul>
+                    <li>《深度学习》（花书）- Ian Goodfellow等</li>
+                    <li>《机器学习》- 周志华</li>
+                    <li>《Python深度学习》- François Chollet</li>
+                    <li>《动手学深度学习》- 李沐等</li>
+                    <li>《自然语言处理入门》- 何晗</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">实践项目</div>
+            <div class="card-body">
+                <p><strong>推荐练习项目</strong></p>
+                <ul>
+                    <li>手写数字识别（MNIST）</li>
+                    <li>图像分类（CIFAR-10）</li>
+                    <li>自然语言情感分析</li>
+                    <li>简单聊天机器人开发</li>
+                    <li>图像生成（GANs）</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            <h3>新起点青少年人工智能奥林匹克竞赛</h3>
+            <p>培养未来AI创新者，点燃科技创新的火花！</p>
+            <p>联系我们：微信18685447407</p>
+        </div>
+        
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-weibo"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-qq"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+    
+    <p>© 2025 新起点青少年人工智能奥林匹克竞赛. 保留所有权利.</p>
+</footer>
+
+<div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+</div>
+
+<script>
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    const icon = themeToggle.querySelector('i');
+    
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        
+        if (body.classList.contains('dark-mode')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    });
+    
+    // 动画效果
+    const sections = document.querySelectorAll('.section');
+    
+    const observerOptions = {
+        threshold: 0.1
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeIn 0.8s ease-in-out forwards';
+            }
+        });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        observer.observe(section);
+    });
+    
+    // 进度条动画
+    document.addEventListener('DOMContentLoaded', () => {
+        const progressBars = document.querySelectorAll('.progress-fill');
+        
+        progressBars.forEach(bar => {
+            const width = bar.getAttribute('data-width');
+            setTimeout(() => {
+                bar.style.width = width + '%';
+            }, 500);
+        });
+    });
+</script>
+
+</body>
+</html>
