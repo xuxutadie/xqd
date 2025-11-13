@@ -110,21 +110,35 @@ CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 ```
 
-4. 启动MongoDB服务
-```bash
-# 使用本地MongoDB
-mongod
+4. 安装MongoDB
 
-# 或使用Docker
+#### 方法一：使用Chocolatey安装（推荐）
+```bash
+# 以管理员身份运行命令提示符，然后执行：
+choco install mongodb -y
+```
+
+#### 方法二：从官网下载安装
+访问 [MongoDB下载中心](https://www.mongodb.com/download-center/community) 下载Windows版本并安装。
+
+#### 方法三：使用Docker运行
+```bash
 docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
 
-5. 启动开发服务器
+5. 启动MongoDB服务
+
+Windows服务安装完成后，MongoDB应该会自动启动。如果没有，请手动启动：
+```bash
+net start MongoDB
+```
+
+6. 启动开发服务器
 ```bash
 npm run dev
 ```
 
-6. 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+7. 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
 
 ## 部署指南
 
