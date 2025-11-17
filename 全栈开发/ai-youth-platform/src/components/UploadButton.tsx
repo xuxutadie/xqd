@@ -219,7 +219,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
-  <div className="bg-cyan-50 rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+  <div className={`upload-modal  bg-cyan-50 dark:bg-slate-900/90 border border-gray-200 dark:border-slate-700 rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-900">上传{config.title}</h3>
               <button
@@ -237,7 +237,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                 const isImageOrUrlField = field.name === 'imageUrl' || field.name === 'url'
                 return (
                   <div key={field.name}>
-                    <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor={field.name} className="block text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">
                       {field.label}
                     </label>
                     {isImageOrUrlField ? (
@@ -248,7 +248,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                             id="uploadFile"
                             type="file"
                             onChange={handleFileChange}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 cursor-pointer pointer-events-auto relative z-50"
+                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-white text-black cursor-pointer pointer-events-auto relative z-50"
                             accept="image/*,video/*,.pdf,.doc,.docx"
                             aria-label="选择本地文件"
                           />
@@ -257,12 +257,12 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                           <div className="mt-2">
                             {file &&
                               (file.type.startsWith('image/') ? (
-                                <img src={preview} alt="预览" className="w-full h-40 object-contain bg-white rounded" />
+                                <img src={preview} alt="预览" className="w-full h-40 object-contain bg-white dark:bg-slate-800 rounded" />
                               ) : file.type.startsWith('video/') ? (
-                                <video src={preview} controls className="w-full h-40 rounded" />
+                                <video src={preview} controls className="w-full h-40 rounded bg-white dark:bg-slate-800" />
                               ) : (
-                                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                                  <span className="text-gray-500">{file.name}</span>
+                                <div className="w-full h-40 bg-gray-100 dark:bg-slate-800 rounded flex items-center justify-center">
+                                  <span className="text-gray-800 dark:text-white">{file.name}</span>
                                 </div>
                               ))}
                           </div>
@@ -273,7 +273,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                         <select
                           id={field.name}
                           name={field.name}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-white text-black"
                           value={formData[field.name] || ''}
                           onChange={(e) => setFormData(prev => ({ ...prev, [field.name]: e.target.value }))}
                         >
@@ -287,7 +287,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                           id={field.name}
                           name={field.name}
                           type={field.type || 'text'}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-white text-black placeholder-gray-800 font-medium"
                           placeholder={field.placeholder}
                           value={formData[field.name] || ''}
                           onChange={handleInputChange}
@@ -309,7 +309,7 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                       id="uploadWorksFile"
                       type="file"
                       onChange={handleFileChange}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 cursor-pointer pointer-events-auto relative z-50"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-700 rounded-md focus:outline-none focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 cursor-pointer pointer-events-auto relative z-50"
                       accept="image/*,video/*,.html"
                       aria-label="选择本地文件"
                     />
@@ -318,9 +318,9 @@ export default function UploadButton({ type, className }: UploadButtonProps) {
                   {file && (
                     <div className="mt-2">
                       {file.type.startsWith('image/') ? (
-                        <img src={preview} alt="预览" className="w-full h-40 object-contain bg-white rounded" />
+                        <img src={preview} alt="预览" className="w-full h-40 object-contain bg-white dark:bg-slate-800 rounded" />
                       ) : file.type.startsWith('video/') ? (
-                        <video src={preview} controls className="w-full h-40 rounded" />
+                        <video src={preview} controls className="w-full h-40 rounded bg-white dark:bg-slate-800" />
                       ) : null}
                     </div>
                   )}

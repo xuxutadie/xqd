@@ -466,3 +466,25 @@ body {
 /* 分割线 */
 .divide-y > * + * { border-top-width: 1px; }
 .divide-gray-200 > * + * { border-color: #E5E7EB; }
+
+/* 上传弹窗在暗色模式下的高对比度修正 */
+
+.upload-modal input::placeholder,
+.upload-modal textarea::placeholder {
+  color: #4B5563;
+}
+
+
+/* 使用 .dark 类时的强制高对比（站点主题为暗色） */
+.dark .upload-modal input,
+.dark .upload-modal select,
+.dark .upload-modal textarea {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #000000 !important;
+}
+.dark .upload-modal input::placeholder,
+.dark .upload-modal textarea::placeholder {
+  color: #1f2937 !important;
+  opacity: 1;
+}

@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { rateLimit } from '@/lib/http'
 
 // 为开发环境添加模拟数据库功能
-const useMockDatabase = true // 设为true以使用模拟数据库
+const useMockDatabase = process.env.USE_MOCK_DB !== 'false'
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, 'auth_login', 20, 60_000)
+  if (limited) return limited
   try {
     const { email, password } = await request.json()
     

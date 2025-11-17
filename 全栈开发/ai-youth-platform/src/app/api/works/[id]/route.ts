@@ -16,7 +16,8 @@ export async function DELETE(request: NextRequest) {
       return authResult
     }
 
-    const user = authResult.user; // 获取认证用户的信息
+    const userId = (authResult as any).userId
+    const userRole = (authResult as any).role
 
     // 从URL路径获取ID
     const url = new URL(request.url)
@@ -86,7 +87,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // 如果是学生用户，验证是否是作品的上传者
-    if (user.role === 'student' && workToDelete.uploaderId.toString() !== user._id.toString()) {
+    if (userRole === 'student' && workToDelete.uploaderId.toString() !== String(userId)) {
       return NextResponse.json(
         { error: '您无权删除此作品' },
         { status: 403 }
