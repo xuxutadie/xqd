@@ -1,0 +1,13 @@
+# Ignore large installer files
+全栈开发/mongodb-windows-x86_64-7.0.0-signed.msi
+全栈开发/*.msi
+
+# Node and build artifacts
+node_modules/
+.next/
+dist/
+out/
+coverage/
+
+# Env
+.env*
