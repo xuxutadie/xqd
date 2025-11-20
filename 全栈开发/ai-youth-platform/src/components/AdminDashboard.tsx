@@ -7,7 +7,14 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
+  const [term, setTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
   const [userRole, setUserRole] = useState('')
+  const [editUserId, setEditUserId] = useState<string>('')
+  const [editRole, setEditRole] = useState<string>('student')
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [savingEdit, setSavingEdit] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -55,7 +62,9 @@ export default function AdminDashboard() {
           return
         }
         
-        const response = await fetch('/api/admin/users', {
+        const params = new URLSearchParams()
+        if (term.trim()) { params.set('q', term.trim()); params.set('all','1') } else { params.set('page', String(page)); params.set('pageSize','10') }
+        const response = await fetch(`/api/admin/users?${params.toString()}` , {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -67,7 +76,9 @@ export default function AdminDashboard() {
           throw new Error(result.error || '获取用户数据失败')
         }
         
-        setUsers(result.users || [])
+        const list = result.users || []
+        if (page === 1) setUsers(list); else setUsers(prev => [...prev, ...list])
+        setHasMore(Boolean(result.hasMore))
       } catch (error) {
         console.error('获取用户数据失败:', error)
         setMessage(error instanceof Error ? error.message : '获取用户数据失败')
@@ -78,6 +89,42 @@ export default function AdminDashboard() {
 
     fetchUsers()
   }, [userRole])
+
+  useEffect(() => {
+    if (userRole !== 'admin') return
+    setLoading(true)
+    setPage(1)
+    ;(async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) return
+        const params = new URLSearchParams()
+        if (term.trim()) { params.set('q', term.trim()); params.set('all','1') } else { params.set('page','1'); params.set('pageSize','10') }
+        const resp = await fetch(`/api/admin/users?${params.toString()}`, { headers: { Authorization: `Bearer ${token}` } })
+        const data = await resp.json()
+        if (!resp.ok) throw new Error(data.error || '加载失败')
+        setUsers(data.users || [])
+        setHasMore(Boolean(data.hasMore))
+      } catch (e: any) { setMessage(e?.message || '加载失败') } finally { setLoading(false) }
+    })()
+  }, [term])
+
+  const loadMore = async () => {
+    if (loading || !hasMore || term.trim()) return
+    const nextPage = page + 1
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) return
+      const params = new URLSearchParams({ page: String(nextPage), pageSize: '10' })
+      const resp = await fetch(`/api/admin/users?${params.toString()}`, { headers: { Authorization: `Bearer ${token}` } })
+      const data = await resp.json()
+      if (!resp.ok) throw new Error(data.error || '加载失败')
+      setUsers(prev => [...prev, ...(data.users || [])])
+      setHasMore(Boolean(data.hasMore))
+      setPage(nextPage)
+    } catch (e: any) { setMessage(e?.message || '加载失败') } finally { setLoading(false) }
+  }
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
@@ -107,8 +154,10 @@ export default function AdminDashboard() {
 
   // 处理编辑用户
   const handleEditUser = (userId: string) => {
-    // 这里可以实现编辑用户的逻辑，例如打开编辑模态框
-    setMessage(`编辑用户 ID: ${userId}`)
+    const u = users.find(x => x._id === userId)
+    setEditUserId(userId)
+    setEditRole(u?.role || 'student')
+    setShowEditModal(true)
   }
 
   // 处理删除用户
@@ -174,6 +223,71 @@ export default function AdminDashboard() {
     router.push(`/admin/settings/${settingType}`)
   }
 
+  const saveUserRole = async () => {
+    if (!editUserId) return
+    setSavingEdit(true)
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) { setMessage('请先登录'); return }
+      const resp = await fetch('/api/admin/users', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ userId: editUserId, role: editRole })
+      })
+      const data = await resp.json()
+      if (!resp.ok) throw new Error(data.error || '更新失败')
+      setUsers(prev => prev.map(u => u._id === editUserId ? { ...u, role: data.user?.role || editRole } : u))
+      setMessage('用户角色更新成功')
+      setShowEditModal(false)
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : '更新失败')
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
+  const AddTeacherButton = () => {
+    const [pickerTerm, setPickerTerm] = useState('')
+    const candidates = users.filter(u => u.role === 'student' && (`${u.username||''} ${u.email||''}`).toLowerCase().includes(pickerTerm.toLowerCase()))
+    const [targetId, setTargetId] = useState('')
+    const [processing, setProcessing] = useState(false)
+    const upgrade = async () => {
+      if (!targetId) { setMessage('请选择学员'); return }
+      setProcessing(true)
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) { setMessage('请先登录'); return }
+        const resp = await fetch('/api/admin/users', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ userId: targetId, role: 'teacher' })
+        })
+        const data = await resp.json()
+        if (!resp.ok) throw new Error(data.error || '设为教师失败')
+        setUsers(prev => prev.map(u => u._id === targetId ? { ...u, role: 'teacher' } : u))
+        setMessage('已设为教师')
+        setTargetId('')
+      } catch (e) {
+        setMessage(e instanceof Error ? e.message : '设为教师失败')
+      } finally {
+        setProcessing(false)
+      }
+    }
+    return (
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-sm text-gray-700 dark:text-gray-300">添加老师：</span>
+        <input value={pickerTerm} onChange={e => setPickerTerm(e.target.value)} placeholder="搜索学员" className="px-2 py-1 border rounded bg-white dark:bg-slate-900" />
+        <select className="border rounded px-2 py-1 bg-white dark:bg-slate-900" value={targetId} onChange={e => setTargetId(e.target.value)}>
+          <option value="">选择学员</option>
+          {candidates.map(c => (
+            <option key={c._id} value={c._id}>{c.username}（{c.email}）</option>
+          ))}
+        </select>
+        <button className="px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50" disabled={processing} onClick={upgrade}>{processing ? '处理中...' : '设为教师'}</button>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 text-gray-900 dark:text-gray-100">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">管理员控制台</h1>
@@ -186,6 +300,10 @@ export default function AdminDashboard() {
       
         <div className="ui-card p-6 mb-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">用户管理</h2>
+        <div className="flex items-center gap-3 mb-3">
+          <input value={term} onChange={e => setTerm(e.target.value)} placeholder="搜索用户名或邮箱" className="px-3 py-2 border rounded-md bg-white dark:bg-slate-900" />
+        </div>
+        <AddTeacherButton />
         {loading ? (
           <div className="animate-pulse">
             <div className="h-10 bg-gray-200 rounded mb-4"></div>
@@ -252,6 +370,9 @@ export default function AdminDashboard() {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-center py-3">
+              {!term && hasMore && (<button onClick={loadMore} className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200">加载更多</button>)}
+            </div>
           </div>
         ) : (
           <p className="text-gray-700 dark:text-gray-300">暂无用户数据</p>
@@ -352,6 +473,32 @@ export default function AdminDashboard() {
             </div>
         </div>
       </div>
+
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-6 w-full max-w-md">
+            <div className="text-lg font-semibold mb-4">编辑用户</div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">用户ID</span>
+                <span className="text-sm text-gray-600 dark:text-gray-300">{editUserId}</span>
+              </div>
+              <label className="flex items-center gap-2">
+                <span className="text-sm">角色</span>
+                <select className="border rounded px-2 py-1 bg-white dark:bg-slate-900" value={editRole} onChange={e => setEditRole(e.target.value)}>
+                  <option value="student">学员</option>
+                  <option value="teacher">教师</option>
+                  <option value="admin">管理员</option>
+                </select>
+              </label>
+            </div>
+            <div className="mt-5 flex items-center justify-end gap-3">
+              <button className="px-3 py-1 rounded border" onClick={() => setShowEditModal(false)}>取消</button>
+              <button className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50" disabled={savingEdit} onClick={saveUserRole}>{savingEdit ? '保存中...' : '保存'}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

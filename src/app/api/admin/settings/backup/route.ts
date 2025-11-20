@@ -1,62 +1,73 @@
-import { NextRequest } from 'next/server'
-import { join } from 'path'
-import { existsSync } from 'fs'
-import { readFile, writeFile, mkdir, readdir } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/auth'
-import { ok, badRequest } from '@/lib/http'
+import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import { join } from 'path'
 
-const dataDir = join(process.cwd(), 'public', 'data')
-const backupsDir = join(dataDir, 'backups')
+export const dynamic = 'force-dynamic'
 
-async function ensureDirs() {
-  if (!existsSync(dataDir)) await mkdir(dataDir, { recursive: true })
-  if (!existsSync(backupsDir)) await mkdir(backupsDir, { recursive: true })
-}
+const DATA_DIR = join(process.cwd(), 'public', 'data')
+const BACKUP_DIR = join(DATA_DIR, 'backups')
 
-async function readJson(path: string, fallback: any) {
-  try {
-    const content = await readFile(path, 'utf-8')
-    return content ? JSON.parse(content) : fallback
-  } catch { return fallback }
-}
+const FILES = [
+  'website-config.json',
+  'permissions.json',
+  'works-meta.json'
+]
 
 export async function GET(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
-  await ensureDirs()
-  const files = await readdir(backupsDir)
-  const list = files.filter(f => f.endsWith('.json')).sort().reverse().slice(0, 20)
-  return ok({ backups: list })
+  if (auth instanceof NextResponse) return auth
+  try {
+    if (!existsSync(BACKUP_DIR)) await mkdir(BACKUP_DIR, { recursive: true })
+    const list = await readdir(BACKUP_DIR)
+    const backups = list.filter(n => n.endsWith('.json')).sort().reverse().slice(0, 20)
+    return NextResponse.json({ backups }, { status: 200 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
+  }
 }
 
 export async function POST(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
-  await ensureDirs()
+  if (auth instanceof NextResponse) return auth
   try {
-    const body = await request.json()
+    const body = await request.json().catch(() => ({}))
     const action = String(body.action || '')
+    if (!existsSync(DATA_DIR)) await mkdir(DATA_DIR, { recursive: true })
+    if (!existsSync(BACKUP_DIR)) await mkdir(BACKUP_DIR, { recursive: true })
+
     if (action === 'backup') {
-      const site = await readJson(join(dataDir, 'site-config.json'), {})
-      const users = await readJson(join(dataDir, 'users-meta.json'), [])
-      const works = await readJson(join(dataDir, 'works-meta.json'), {})
-      const payload = { ts: new Date().toISOString(), site, users, works }
-      const name = `backup-${Date.now()}.json`
-      await writeFile(join(backupsDir, name), JSON.stringify(payload, null, 2), 'utf-8')
-      return ok({ message: '备份完成', name })
+      const payload: Record<string, any> = {}
+      for (const name of FILES) {
+        try {
+          const p = join(DATA_DIR, name)
+          const txt = await readFile(p, 'utf-8')
+          payload[name] = txt ? JSON.parse(txt) : {}
+        } catch { payload[name] = {} }
+      }
+      const fileName = `backup-${Date.now()}.json`
+      await writeFile(join(BACKUP_DIR, fileName), JSON.stringify(payload, null, 2), 'utf-8')
+      return NextResponse.json({ message: 'ok', name: fileName }, { status: 200 })
     }
+
     if (action === 'restore') {
       const name = String(body.name || '')
-      if (!name) return badRequest('缺少备份文件名')
-      const data = await readJson(join(backupsDir, name), null)
-      if (!data) return badRequest('备份不存在')
-      await writeFile(join(dataDir, 'site-config.json'), JSON.stringify(data.site ?? {}, null, 2), 'utf-8')
-      await writeFile(join(dataDir, 'users-meta.json'), JSON.stringify(data.users ?? [], null, 2), 'utf-8')
-      await writeFile(join(dataDir, 'works-meta.json'), JSON.stringify(data.works ?? {}, null, 2), 'utf-8')
-      return ok({ message: '恢复完成' })
+      if (!name || /[\\/]/.test(name) || !name.endsWith('.json')) {
+        return NextResponse.json({ error: '文件名不合法' }, { status: 400 })
+      }
+      const bfile = join(BACKUP_DIR, name)
+      const txt = await readFile(bfile, 'utf-8')
+      const payload = txt ? JSON.parse(txt) : {}
+      for (const key of FILES) {
+        const target = join(DATA_DIR, key)
+        await writeFile(target, JSON.stringify(payload[key] || {}, null, 2), 'utf-8')
+      }
+      return NextResponse.json({ message: 'ok' }, { status: 200 })
     }
-    return badRequest('未知操作')
-  } catch {
-    return badRequest('请求体格式错误')
+
+    return NextResponse.json({ error: '未知操作' }, { status: 400 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
   }
 }

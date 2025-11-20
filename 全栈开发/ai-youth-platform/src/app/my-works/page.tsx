@@ -18,6 +18,8 @@ type WorkItem = {
   videoUrl?: string
   htmlUrl?: string
   url?: string
+  className?: string
+  grade?: string
 }
 
 export default function MyWorksPage() {
@@ -27,6 +29,12 @@ export default function MyWorksPage() {
   const [error, setError] = useState('')
   const router = useRouter()
   const [selectedType, setSelectedType] = useState<'all' | 'image' | 'video' | 'html'>('all')
+  const [term, setTerm] = useState('')
+  const [showEdit, setShowEdit] = useState(false)
+  const [editWork, setEditWork] = useState<WorkItem | null>(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [editDesc, setEditDesc] = useState('')
+  const [editFile, setEditFile] = useState<File | null>(null)
 
   const fetchWorks = async () => {
     if (!user?._id) return
@@ -80,8 +88,61 @@ export default function MyWorksPage() {
   }, [allWorks, user])
 
   const filteredWorks = useMemo(() => {
-    return selectedType === 'all' ? myWorks : myWorks.filter(w => w.type === selectedType)
-  }, [myWorks, selectedType])
+    const base = selectedType === 'all' ? myWorks : myWorks.filter(w => w.type === selectedType)
+    const t = term.trim().toLowerCase()
+    if (!t) return base
+    return base.filter(w => {
+      const title = (w.title || '').toLowerCase()
+      const desc = (w.description || '').toLowerCase()
+      const cls = (w.className || '').toLowerCase()
+      const grade = (w.grade || '').toLowerCase()
+      const fileName = (w.url || '').split('/').pop()?.toLowerCase() || ''
+      return title.includes(t) || desc.includes(t) || cls.includes(t) || grade.includes(t) || fileName.includes(t)
+    })
+  }, [myWorks, selectedType, term])
+
+  const openEdit = (w: WorkItem) => {
+    setEditWork(w)
+    setEditTitle(w.title || '')
+    setEditDesc(w.description || '')
+    setEditFile(null)
+    setShowEdit(true)
+  }
+
+  const onEditFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] || null
+    setEditFile(f)
+  }
+
+  const submitEdit = async () => {
+    if (!editWork) return
+    try {
+      const id = editWork._id || editWork.id || ''
+      if (!id) return
+      if (editFile) {
+        const fd = new FormData()
+        fd.append('file', editFile)
+        fd.append('workId', id)
+        if (editTitle) fd.append('title', editTitle)
+        const t = editWork.type || 'image'
+        fd.append('type', t)
+        if (editWork.grade) fd.append('grade', editWork.grade)
+        if (editWork.className) fd.append('className', editWork.className)
+        await fetch('/api/works/upload', { method: 'POST', body: fd })
+      } else {
+        const body: any = { title: editTitle }
+        if (editDesc) body.description = editDesc
+        await fetch(`/api/works/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      }
+      setShowEdit(false)
+      setEditWork(null)
+      setEditFile(null)
+      await fetchWorks()
+      alert('更新成功')
+    } catch (e) {
+      alert('更新失败')
+    }
+  }
 
   const renderThumb = (work: WorkItem) => {
     const workUrl = work.imageUrl || work.videoUrl || work.htmlUrl || work.url || ''
@@ -121,7 +182,17 @@ export default function MyWorksPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-cyan-700">我的作品</h1>
-          <a href="/works" className="text-cyan-700 hover:underline">查看全部作品</a>
+          <div className="flex items-center gap-3">
+            <a href="/works" className="text-cyan-700 hover:underline">查看全部作品</a>
+            <input
+              type="text"
+              placeholder="搜索作品、文件名、班级、年级..."
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              className="px-2 py-1 text-sm rounded-md border border-gray-300"
+            />
+            {term && <span className="text-sm text-gray-600">结果：{filteredWorks.length}</span>}
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -185,10 +256,50 @@ export default function MyWorksPage() {
                     删除
                   </button>
                 </div>
-              </div>
+                <div className="mt-2 flex gap-2 justify-end">
+                  <button
+                    onClick={() => openEdit(work)}
+                    className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    编辑
+                  </button>
+                </div>
+                
+        </div>
             </div>
           ))}
         </div>
+        {showEdit && editWork && (
+          <div className="fixed inset-0 bg-black/40 grid place-items-center">
+            <div className="bg-white rounded-xl shadow p-6 w-[90%] max-w-md">
+              <h2 className="text-lg font-semibold text-cyan-700">编辑作品</h2>
+              <div className="mt-4 space-y-3">
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  placeholder="作品标题"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                />
+                <textarea
+                  value={editDesc}
+                  onChange={(e) => setEditDesc(e.target.value)}
+                  placeholder="作品描述（可选）"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  rows={3}
+                />
+                <div>
+                  <span className="text-sm text-gray-700">替换文件（可选）</span>
+                  <input type="file" onChange={onEditFileChange} className="mt-1" />
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end gap-2">
+                <button onClick={() => { setShowEdit(false); setEditWork(null); setEditFile(null) }} className="px-3 py-1 rounded-md border border-gray-300">取消</button>
+                <button onClick={submitEdit} className="px-3 py-1 rounded-md bg-cyan-600 text-white">保存</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   )

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Work from '@/models/Work'
 import connectDB from '@/lib/mongodb'
 import { authMiddleware } from '@/lib/auth'
+import User from '@/models/User'
 import { readdir, stat, unlink, readFile } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
@@ -72,7 +73,7 @@ async function getUploadedFiles() {
           
           const metaEntry = meta[file] || {}
           const resolvedType = metaEntry.type || type
-          const url = `/uploads/works/${file}`
+          const url = `/api/uploads/file?type=works&name=${encodeURIComponent(file)}`
           fileInfos.push({
             _id: `upload_${timestamp}`,
             title: metaEntry.title || originalNameNoExt,
@@ -111,10 +112,10 @@ export async function GET(request: NextRequest) {
       if (!u) return ''
       try {
         const idx = u.indexOf('/uploads/works/')
-        if (idx >= 0) {
-          return u.substring(idx + '/uploads/works/'.length)
-        }
-        return ''
+        if (idx >= 0) return u.substring(idx + '/uploads/works/'.length)
+        const parsed = new URL(u, 'http://localhost')
+        const qn = parsed.searchParams.get('name')
+        return qn || ''
       } catch {
         return ''
       }
@@ -149,15 +150,23 @@ export async function GET(request: NextRequest) {
         let url = base.url || base.imageUrl || base.videoUrl || base.htmlUrl
         let fileName = ''
         if (url) {
-          fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
-          if (!url.startsWith('http')) {
-            const cleanFileName = url.startsWith('/') ? url.substring(1) : url
-            const fullUrl = `/uploads/works/${cleanFileName}`
-            const localPath = join(process.cwd(), 'public', fullUrl)
-            if (existsSync(localPath)) {
-              url = fullUrl
+          try {
+            const parsed = new URL(url, 'http://localhost')
+            const nameParam = parsed.searchParams.get('name')
+            const typeParam = parsed.searchParams.get('type') || 'works'
+            if (parsed.pathname === '/api/uploads/file' && nameParam) {
+              fileName = nameParam
+              url = `/api/uploads/file?type=${typeParam}&name=${encodeURIComponent(nameParam)}`
             } else {
-              url = `https://picsum.photos/seed/${fileName}/400/300`
+              fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
+              if (!url.startsWith('http')) {
+                url = `/api/uploads/file?type=works&name=${encodeURIComponent(fileName)}`
+              }
+            }
+          } catch {
+            fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
+            if (!url.startsWith('http')) {
+              url = `/api/uploads/file?type=works&name=${encodeURIComponent(fileName)}`
             }
           }
         }
@@ -188,21 +197,39 @@ export async function GET(request: NextRequest) {
     }
 
     // 未指定过滤条件时，返回所有作品并合并上传目录文件
-    const dbWorksAll = await Work.find({}).sort({ createdAt: -1 })
+    // 若为教师，则按其管理的年级/班级过滤
+    let teacherFilter: any = {}
+    try {
+      const auth = await authMiddleware(request)
+      if (!(auth instanceof NextResponse) && (auth as any).role === 'teacher') {
+        const t = await User.findById((auth as any).userId).select('manageGrade manageClassName')
+        if (t?.manageGrade) teacherFilter.grade = t.manageGrade
+        if (t?.manageClassName) teacherFilter.className = t.manageClassName
+      }
+    } catch {}
+    const dbWorksAll = await Work.find(teacherFilter).sort({ createdAt: -1 })
     const enrichedDbWorksAll = dbWorksAll.map((w: any) => {
       const base = w.toObject ? w.toObject() : w
       let url = base.url || base.imageUrl || base.videoUrl || base.htmlUrl
       let fileName = ''
       if (url) {
-        fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
-        if (!url.startsWith('http')) {
-          const cleanFileName = url.startsWith('/') ? url.substring(1) : url
-          const fullUrl = `/uploads/works/${cleanFileName}`
-          const localPath = join(process.cwd(), 'public', fullUrl)
-          if (existsSync(localPath)) {
-            url = fullUrl
+        try {
+          const parsed = new URL(url, 'http://localhost')
+          const nameParam = parsed.searchParams.get('name')
+          const typeParam = parsed.searchParams.get('type') || 'works'
+          if (parsed.pathname === '/api/uploads/file' && nameParam) {
+            fileName = nameParam
+            url = `/api/uploads/file?type=${typeParam}&name=${encodeURIComponent(nameParam)}`
           } else {
-            url = `https://picsum.photos/seed/${fileName}/400/300`
+            fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
+            if (!url.startsWith('http')) {
+              url = `/api/uploads/file?type=works&name=${encodeURIComponent(fileName)}`
+            }
+          }
+        } catch {
+          fileName = url.includes('/') ? url.substring(url.lastIndexOf('/') + 1) : url
+          if (!url.startsWith('http')) {
+            url = `/api/uploads/file?type=works&name=${encodeURIComponent(fileName)}`
           }
         }
       }
@@ -242,34 +269,16 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 无过滤时的回退：返回上传目录中的文件 + 少量示例数据，确保页面正常
+    // 无过滤时的回退：生产环境仅返回本地上传文件；开发环境附加示例数据
     try {
       const uploadedFiles = await getUploadedFiles()
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({ works: uploadedFiles }, { status: 200 })
+      }
       const mockWorks = [
-        {
-          _id: "643d5a1c9d3f2a1b8c9e4f2a",
-          title: "智能垃圾分类系统",
-          type: "image",
-          url: "https://picsum.photos/seed/1/400/300",
-          createdAt: "2023-04-15T10:30:00.000Z",
-          updatedAt: "2023-04-15T10:30:00.000Z"
-        },
-        {
-          _id: "643d5a1c9d3f2a1b8c9e4f2b",
-          title: "AI 辅助学习平台",
-          type: "video",
-          url: "https://www.w3schools.com/html/mov_bbb.mp4",
-          createdAt: "2023-05-20T14:00:00.000Z",
-          updatedAt: "2023-05-20T14:00:00.000Z"
-        },
-        {
-          _id: "643d5a1c9d3f2a1b8c9e4f2c",
-          title: "青少年编程挑战赛作品",
-          type: "html",
-          url: "/examples/example.html",
-          createdAt: "2023-06-01T09:00:00.000Z",
-          updatedAt: "2023-06-01T09:00:00.000Z"
-        }
+        { _id: "643d5a1c9d3f2a1b8c9e4f2a", title: "智能垃圾分类系统", type: "image", url: "https://picsum.photos/seed/1/400/300", createdAt: "2023-04-15T10:30:00.000Z", updatedAt: "2023-04-15T10:30:00.000Z" },
+        { _id: "643d5a1c9d3f2a1b8c9e4f2b", title: "AI 辅助学习平台", type: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4", createdAt: "2023-05-20T14:00:00.000Z", updatedAt: "2023-05-20T14:00:00.000Z" },
+        { _id: "643d5a1c9d3f2a1b8c9e4f2c", title: "青少年编程挑战赛作品", type: "html", url: "/examples/example.html", createdAt: "2023-06-01T09:00:00.000Z", updatedAt: "2023-06-01T09:00:00.000Z" }
       ]
       const allWorks = [...mockWorks, ...uploadedFiles]
       return NextResponse.json({ works: allWorks }, { status: 200 })

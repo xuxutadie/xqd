@@ -1,74 +1,59 @@
-import { NextRequest } from 'next/server'
-import { join } from 'path'
-import { existsSync } from 'fs'
-import { readFile, writeFile, mkdir } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/auth'
-import { ok, badRequest } from '@/lib/http'
+import { mkdir, readFile, writeFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import { join } from 'path'
+
+export const dynamic = 'force-dynamic'
 
 type Role = 'admin' | 'teacher' | 'student'
-type PermissionConfig = Record<Role, { viewUsers: boolean; editUsers: boolean; manageUploads: boolean; accessAdmin: boolean }>
+type Perm = { viewUsers: boolean; editUsers: boolean; manageUploads: boolean; accessAdmin: boolean }
 
-const dataDir = join(process.cwd(), 'public', 'data')
-const file = join(dataDir, 'permissions.json')
+const DATA_DIR = join(process.cwd(), 'public', 'data')
+const FILE = join(DATA_DIR, 'permissions.json')
 
-async function readConfig(): Promise<PermissionConfig> {
-  if (!existsSync(file)) {
-    return {
-      admin: { viewUsers: true, editUsers: true, manageUploads: true, accessAdmin: true },
-      teacher: { viewUsers: true, editUsers: false, manageUploads: true, accessAdmin: false },
-      student: { viewUsers: false, editUsers: false, manageUploads: true, accessAdmin: false },
-    }
+function defaultPerms(): Record<Role, Perm> {
+  return {
+    admin: { viewUsers: true, editUsers: true, manageUploads: true, accessAdmin: true },
+    teacher: { viewUsers: true, editUsers: false, manageUploads: true, accessAdmin: false },
+    student: { viewUsers: false, editUsers: false, manageUploads: true, accessAdmin: false },
   }
-  try {
-    const content = await readFile(file, 'utf-8')
-    const cfg = content ? JSON.parse(content) : {}
-    return {
-      admin: cfg.admin ?? { viewUsers: true, editUsers: true, manageUploads: true, accessAdmin: true },
-      teacher: cfg.teacher ?? { viewUsers: true, editUsers: false, manageUploads: true, accessAdmin: false },
-      student: cfg.student ?? { viewUsers: false, editUsers: false, manageUploads: true, accessAdmin: false },
-    }
-  } catch {
-    return {
-      admin: { viewUsers: true, editUsers: true, manageUploads: true, accessAdmin: true },
-      teacher: { viewUsers: true, editUsers: false, manageUploads: true, accessAdmin: false },
-      student: { viewUsers: false, editUsers: false, manageUploads: true, accessAdmin: false },
-    }
-  }
-}
-
-async function writeConfig(cfg: PermissionConfig): Promise<PermissionConfig> {
-  if (!existsSync(dataDir)) await mkdir(dataDir, { recursive: true })
-  await writeFile(file, JSON.stringify(cfg, null, 2), 'utf-8')
-  return cfg
 }
 
 export async function GET(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
-  const cfg = await readConfig()
-  return ok({ permissions: cfg })
+  if (auth instanceof NextResponse) return auth
+  try {
+    if (!existsSync(DATA_DIR)) await mkdir(DATA_DIR, { recursive: true })
+    let perms = defaultPerms()
+    try {
+      const txt = await readFile(FILE, 'utf-8')
+      if (txt) perms = JSON.parse(txt)
+    } catch {}
+    return NextResponse.json({ permissions: perms }, { status: 200 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
+  }
 }
 
 export async function PUT(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
+  if (auth instanceof NextResponse) return auth
   try {
-    const body = await request.json()
-    if (!body || typeof body !== 'object') return badRequest('请求体格式错误')
-    const merged: PermissionConfig = await readConfig()
-    ;(['admin','teacher','student'] as Role[]).forEach(role => {
-      if (body[role]) {
-        merged[role] = {
-          viewUsers: !!body[role].viewUsers,
-          editUsers: !!body[role].editUsers,
-          manageUploads: !!body[role].manageUploads,
-          accessAdmin: !!body[role].accessAdmin,
-        }
-      }
+    const body = await request.json().catch(() => ({}))
+    const roles: Role[] = ['admin', 'teacher', 'student']
+    const keys: (keyof Perm)[] = ['viewUsers','editUsers','manageUploads','accessAdmin']
+    const out: Record<Role, Perm> = defaultPerms()
+    roles.forEach(r => {
+      const v = body?.[r] || {}
+      const p: any = {}
+      keys.forEach(k => { p[k] = Boolean(v?.[k]) })
+      ;(out as any)[r] = p
     })
-    const saved = await writeConfig(merged)
-    return ok({ message: '保存成功', permissions: saved })
-  } catch {
-    return badRequest('请求体格式错误')
+    if (!existsSync(DATA_DIR)) await mkdir(DATA_DIR, { recursive: true })
+    await writeFile(FILE, JSON.stringify(out, null, 2), 'utf-8')
+    return NextResponse.json({ message: 'ok', permissions: out }, { status: 200 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
   }
 }

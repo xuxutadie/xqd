@@ -1,40 +1,41 @@
-import { NextRequest } from 'next/server'
-import { join } from 'path'
-import { existsSync } from 'fs'
-import { readFile, writeFile, appendFile, mkdir } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/auth'
-import { ok, badRequest } from '@/lib/http'
+import { mkdir, readFile, appendFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import { join } from 'path'
 
-const dataDir = join(process.cwd(), 'public', 'data')
-const logFile = join(dataDir, 'system.log')
+export const dynamic = 'force-dynamic'
 
-async function ensureDir() {
-  if (!existsSync(dataDir)) await mkdir(dataDir, { recursive: true })
-  if (!existsSync(logFile)) await writeFile(logFile, '', 'utf-8')
-}
+const DATA_DIR = join(process.cwd(), 'public', 'data')
+const LOG_FILE = join(DATA_DIR, 'system.log')
 
 export async function GET(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
-  await ensureDir()
-  const content = await readFile(logFile, 'utf-8')
-  const lines = content.split('\n').filter(Boolean)
-  const last = lines.slice(-200)
-  return ok({ lines: last })
+  if (auth instanceof NextResponse) return auth
+  try {
+    if (!existsSync(DATA_DIR)) await mkdir(DATA_DIR, { recursive: true })
+    let content = ''
+    try { content = await readFile(LOG_FILE, 'utf-8') } catch {}
+    const lines = content ? content.split(/\r?\n/).slice(-200) : []
+    return NextResponse.json({ lines }, { status: 200 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
+  }
 }
 
 export async function POST(request: NextRequest) {
   const auth = await authMiddleware(request, ['admin'])
-  if ('success' in (auth as any) === false) return auth
-  await ensureDir()
+  if (auth instanceof NextResponse) return auth
   try {
-    const body = await request.json()
+    const body = await request.json().catch(() => ({}))
     const msg = String(body.message || '').trim()
-    if (!msg) return badRequest('缺少日志内容')
-    const line = `${new Date().toISOString()} ${msg}\n`
-    await appendFile(logFile, line, 'utf-8')
-    return ok({ message: '已写入' })
-  } catch {
-    return badRequest('请求体格式错误')
+    if (!existsSync(DATA_DIR)) await mkdir(DATA_DIR, { recursive: true })
+    const prefix = new Date().toISOString()
+    const who = `${(auth as any).role}:${(auth as any).userId}`
+    const line = `${prefix} [${who}] ${msg || '(empty)'}\n`
+    await appendFile(LOG_FILE, line, 'utf-8')
+    return NextResponse.json({ message: 'ok' }, { status: 200 })
+  } catch (e) {
+    return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
   }
 }

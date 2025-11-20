@@ -114,5 +114,16 @@
     "uploaderId": "mock-user-123",
     "createdAt": "2025-11-17T11:28:12.511Z",
     "updatedAt": "2025-11-17T11:28:12.511Z"
+  },
+  "1763607281820_691e7fbcc87c35bc6d1256ac_2e7855a0afc978db.png": {
+    "title": "1233",
+    "type": "image",
+    "authorName": "18685442407",
+    "className": "",
+    "grade": "六年级",
+    "url": "/api/uploads/file?type=works&name=1763607281820_691e7fbcc87c35bc6d1256ac_2e7855a0afc978db.png",
+    "uploaderId": "691e7fbcc87c35bc6d1256ac",
+    "createdAt": "2025-11-20T02:54:41.827Z",
+    "updatedAt": "2025-11-20T02:54:41.827Z"
   }
 }

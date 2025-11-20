@@ -43,6 +43,13 @@ export async function GET(request: NextRequest) {
       )
     }
     
+    const { searchParams } = new URL(request.url)
+    const q = (searchParams.get('q') || '').trim().toLowerCase()
+    const roleParam = (searchParams.get('role') || '').trim()
+    const all = searchParams.get('all') === '1'
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
+    const pageSize = Math.min(1000, Math.max(1, parseInt(searchParams.get('pageSize') || '10', 10)))
+
     const useMock = process.env.USE_MOCK_DB !== 'false'
     if (useMock) {
       try {
@@ -59,7 +66,16 @@ export async function GET(request: NextRequest) {
             { _id: '3', username: 'student', email: 'student@example.com', role: 'student', createdAt: new Date().toISOString() }
           ]
         }
-        return NextResponse.json({ users }, { status: 200 })
+        let filtered = users
+        if (roleParam) filtered = filtered.filter(u => String(u.role) === roleParam)
+        if (q) filtered = filtered.filter(u => {
+          const s = `${u.username||''} ${u.email||''}`.toLowerCase()
+          return s.includes(q)
+        })
+        const total = filtered.length
+        const items = all ? filtered : filtered.slice((page-1)*pageSize, (page-1)*pageSize + pageSize)
+        const hasMore = !all && (page*pageSize < total)
+        return NextResponse.json({ users: items, total, page, pageSize, hasMore }, { status: 200 })
       } catch {
         const users = [
           { _id: '1', username: 'admin', email: 'admin@example.com', role: 'admin', createdAt: new Date().toISOString() },
@@ -71,8 +87,22 @@ export async function GET(request: NextRequest) {
     }
     try {
       await connectDB()
-      const users = await User.find({}).select('-password')
-      return NextResponse.json({ users }, { status: 200 })
+      const filter: any = {}
+      if (roleParam) filter.role = roleParam
+      if (q) filter.$or = [
+        { username: { $regex: q, $options: 'i' } },
+        { email: { $regex: q, $options: 'i' } }
+      ]
+      const query = (User as any).find(filter).select('-password').sort({ createdAt: -1 })
+      const total = await (User as any).countDocuments(filter)
+      let items: any[]
+      if (all) {
+        items = await query.exec()
+      } else {
+        items = await query.skip((page-1)*pageSize).limit(pageSize).exec()
+      }
+      const hasMore = !all && (page*pageSize < total)
+      return NextResponse.json({ users: items, total, page, pageSize, hasMore }, { status: 200 })
     } catch (dbError) {
       const users = [
         { _id: '1', username: 'admin', email: 'admin@example.com', role: 'admin', createdAt: new Date().toISOString() },
@@ -120,6 +150,27 @@ export async function PUT(request: NextRequest) {
     try {
       await connectDB()
       
+      // 管理员邮箱与唯一性校验
+      if (role === 'admin') {
+        const targetUser = await User.findById(userId)
+        if (!targetUser) {
+          return NextResponse.json({ error: '用户不存在' }, { status: 404 })
+        }
+        const adminEmail = process.env.ADMIN_EMAIL || '30761985@qq.com'
+        if (targetUser.email !== adminEmail) {
+          return NextResponse.json(
+            { error: '仅允许指定邮箱设为管理员' },
+            { status: 403 }
+          )
+        }
+        const existingAdmin = await User.findOne({ role: 'admin' })
+        if (existingAdmin && existingAdmin._id.toString() !== userId) {
+          return NextResponse.json(
+            { error: '系统已存在管理员账号，管理员唯一' },
+            { status: 409 }
+          )
+        }
+      }
       // 更新用户角色
       const updatedUser = await User.findByIdAndUpdate(
         userId,
